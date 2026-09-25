@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-
-.env                # environment files -API keys ko github se hide rkhne ke liye
+ #environment files -API keys ko github se hide rkhne ke liye
+.env               
 .env.local
 .env.*.local
