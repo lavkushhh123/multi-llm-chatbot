@@ -7,30 +7,34 @@ import claudeIcon from './assets/claude.png'
 
  function App() {
 
-  // User input me jo prompt likhega, wo yaha store hoga
-  const [prompt, setPrompt] = useState("");
+  
+  const [prompt, setPrompt] = useState("");              // User input me jo prompt likhega, wo yaha store hoga
 
-  // Gemini, Groq aur Mistral ke responses yaha store honge
-  const [responses, setResponses] = useState([]);
+  
+  const [responses, setResponses] = useState([]);          // Gemini, Groq aur Mistral ke responses yaha store honge
 
-  // API request chal rahi hai ya nahi, ye track karega
-  const [loading, setLoading] = useState(false);
+  
+  const [loading, setLoading] = useState(false);                   // API request chal rahi hai ya nahi, ye track karega
+  const [history , setHistory] = useState(()=>{                  // previous prompt ko browser me store krne ke liye
+  const savedHistory = localStorage.getItem("chatHistory");      // browser me save history  read kr rha hai
+  
+  return savedHistory ? JSON.parse(savedHistory) :[];            // agar history save hai to use array me convert kr do 
+  })
+  
+  const sendPrompt = async () => {                    // Ye function user ke prompt ko backend par send karega
 
-  // Ye function user ke prompt ko backend par send karega
-  const sendPrompt = async () => {
-
-    // Agar input empty hai to API call nahi hogi
-    if (!prompt.trim()) {
+   
+    if (!prompt.trim()) {                          // Agar input empty hai to API call nahi hogi
       return;
     }
 
-    // API request start hote hi loading true
-    setLoading(true);
+   
+    setLoading(true);                    // API request start hote hi loading true
 
     try {
 
-      // React se hamare backend /api/chat par request bhej rahe hain
-      const response = await fetch("/api/chat", {
+      
+      const response = await fetch("/api/chat", {                   // React se hamare backend /api/chat par request bhej rahe hain
         method: "POST",
 
         // Backend ko bata rahe hain ki data JSON format me hai
@@ -46,9 +50,19 @@ import claudeIcon from './assets/claude.png'
 
       // Backend se aaya JSON response JavaScript object me convert hoga
       const data = await response.json();
+      console.log("Backend response :", data)
+      // agar backend ne error return kiya hai
+      if(!response.ok){
+        console.log("Backend error:",data);
+        return ;
+      }
 
       // Gemini, Groq aur Mistral ke responses state me save honge
       setResponses(data.responses);
+
+      const updateHistory = [prompt , ...history];                                   // current prompt ko history me add kar rhe hain 
+      setHistory(updateHistory);                                                     // History state update
+      localStorage.setItem("chatHistory" , JSON.stringify(updateHistory));            // browser local storage me history save
 
     } catch (error) {
 
@@ -70,11 +84,32 @@ import claudeIcon from './assets/claude.png'
       <aside className = "sidebar">                 {/* aside ka use side information/navigation ke liye hota ha */}
         <h2>⟡ 𝙈𝙐𝙇𝙏𝙄-𝙇𝙇𝙈 ⟡</h2>
 
-        <button> + New Chat </button>
+        <button onClick = {() => {
+          setResponses([]);                     /* current chat ke response clear kr rha hain */
+        
+          setPrompt("");                          // ip box ko bhi empty kr rhe hain
+          setLoading(false);                      // loading state ko reset kr rha hai
+        
+        }}> + New Chat </button>               {/*New Chat dabane par current response cards clear honge, but history delete nahi hogi. */}
 
         <h3>Recent Chats</h3>
-        <p> No recent chats</p>
 
+        {history.length === 0 ?(
+           <p> No recent chats</p>
+        ):( 
+          history.slice(0,5).map((chat , index) => (              /* this will show the latest 5 prompts in your sidebart*/                     
+            <p key = {index}
+            onClick={() => {
+
+              setPrompt(chat);                                    /* previous prompt ko input box me wapas le rhe hai */
+              setResponses([]);                                   /* previous response card clear kr rhe hain */
+            
+            }} > {chat}</p>
+
+          ))
+          
+        )}
+       
       </aside>
 
       {/* main chat area */}
@@ -94,12 +129,15 @@ import claudeIcon from './assets/claude.png'
             <h3> 𝙂𝙀𝙈𝙄𝙉𝙄 </h3>
             </div>
             <p>
-              {responses.find((item) => item.provider === "Gemini")?.success    // responses.find(...) responses array ke andar Gemini ka response find karta hai.
-              ? responses.find((item) => item.provider === "Gemini").response   // item.provider === "Gemini" check karta hai ki current item Gemini ka hai ya nahi.
-              : loading             //?.success check karta hai ki Gemini API successfully response de payi ya nahi.
-              ? "GEnerating response..."
-              : "No response yet"
-              }
+              <p>
+            {loading
+              ? "Generating response..."
+              : responses.find((item) => item.provider === "Gemini")?.success
+                ? responses.find((item) => item.provider === "Gemini").response
+                : responses.find((item) => item.provider === "Gemini")?.error
+                  ? `Error: ${responses.find((item) => item.provider === "Gemini").error}`
+                  : "No response yet"}
+          </p>
 
             </p>
             </div>
@@ -111,11 +149,15 @@ import claudeIcon from './assets/claude.png'
             <h3> 𝙂𝙍𝙊𝙌 </h3>
             </div>
            <p>
-            {responses.find((item) => item.provider === "Groq")?.success
-            ? responses.find((item) => item.provider === "Groq").response
-            : loading
-            ? "Generating response..."
-            : "No response yet"}
+            <p>
+            {loading
+              ? "Generating response..."
+              : responses.find((item) => item.provider === "Groq")?.success
+                ? responses.find((item) => item.provider === "Groq").response
+                : responses.find((item) => item.provider === "Groq")?.error
+                  ? `Error: ${responses.find((item) => item.provider === "Groq").error}`
+                  : "No response yet"}
+         </p>
           </p>
             </div>
 
@@ -126,11 +168,13 @@ import claudeIcon from './assets/claude.png'
                <h3> ⟡ 𝙈𝙄𝙎𝙏𝙍𝘼𝙇 ⟡ </h3>
               </div>
         <p>
-          {responses.find((item) => item.provider === "Mistral")?.success
-            ? responses.find((item) => item.provider === "Mistral").response
-            : loading
-              ? "Generating response..."
-              : "No response yet"}
+          {loading
+            ? "Generating response..."
+            : responses.find((item) => item.provider === "Mistral")?.success
+              ? responses.find((item) => item.provider === "Mistral").response
+              : responses.find((item) => item.provider === "Mistral")?.error
+                ? `Error: ${responses.find((item) => item.provider === "Mistral").error}`
+                : "No response yet"}
         </p>
             </div>
         </section>

@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
   // Gemini request
   const geminiRequest = fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${geminiKey}`,
     {
       method: "POST",
       headers: {
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
         "Authorization": `Bearer ${groqKey}`
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+        model:"openai/gpt-oss-120b" ,
         messages: [
           {
             role: "user",
@@ -115,7 +115,7 @@ export default async function handler(req, res) {
       return {
         provider,
         success: false,
-        error: data.error?.message || "API error"
+        error: data.error?.message || data.message || JSON.stringify(data)
       };
     }
 
