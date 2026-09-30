@@ -21,8 +21,6 @@ export default async function handler(req, res) {
 
   // API keys are read from .env on the server
   const geminiKey = process.env.GEMINI_API_KEY;
-  const groqKey = process.env.GROQ_API_KEY;
-  const mistralKey = process.env.MISTRAL_API_KEY;
 
   // Gemini request
   const geminiRequest = fetch(
@@ -30,7 +28,8 @@ export default async function handler(req, res) {
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "X-google-api-key": geminiKey
       },
       body: JSON.stringify({
         contents: [
@@ -46,53 +45,9 @@ export default async function handler(req, res) {
     }
   );
 
-  // Groq request
-  const groqRequest = fetch(
-    "https://api.groq.com/openai/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${groqKey}`
-      },
-      body: JSON.stringify({
-        model:"openai/gpt-oss-120b" ,
-        messages: [
-          {
-            role: "user",
-            content: prompt
-          }
-        ]
-      })
-    }
-  );
-
-  // Mistral request
-  const mistralRequest = fetch(
-    "https://api.mistral.ai/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${mistralKey}`
-      },
-      body: JSON.stringify({
-        model: "mistral-small-latest",
-        messages: [
-          {
-            role: "user",
-            content: prompt
-          }
-        ]
-      })
-    }
-  );
-
-  // All three API requests run at the same time
+  // GEmini key request runs
   const results = await Promise.allSettled([
     geminiRequest,
-    groqRequest,
-    mistralRequest
   ]);
 
   // Helper function to read each API response
@@ -115,7 +70,9 @@ export default async function handler(req, res) {
       return {
         provider,
         success: false,
-        error: data.error?.message || data.message || JSON.stringify(data)
+        error: `HTTP ${result.value.status}: ${
+        data.error?.message || data.message || JSON.stringify(data)
+        }`
       };
     }
 
@@ -127,23 +84,14 @@ export default async function handler(req, res) {
         response: data.candidates?.[0]?.content?.parts?.[0]?.text || ""
       };
     }
-
-    // Groq and Mistral response format
-    return {
-      provider,
-      success: true,
-      response: data.choices?.[0]?.message?.content || ""
-    };
   }
 
-  // Convert all three API results into simple objects
+  // Convert Gemini result into a simple object 
   const responses = await Promise.all([
     getResponse(results[0], "Gemini"),
-    getResponse(results[1], "Groq"),
-    getResponse(results[2], "Mistral")
   ]);
 
-  // Send all three results back to React
+  // Send Gemini results back to React
   return res.status(200).json({
     responses
   });

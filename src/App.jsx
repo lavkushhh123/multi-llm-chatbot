@@ -2,8 +2,6 @@
 import { useState } from 'react'  
 import './App.css'
 import geminiIcon from './assets/gemini.png'
-import groqIcon from './assets/groq.png'
-import claudeIcon from './assets/claude.png'
 
  function App() {
 
@@ -129,7 +127,6 @@ import claudeIcon from './assets/claude.png'
             <h3> 𝙂𝙀𝙈𝙄𝙉𝙄 </h3>
             </div>
             <p>
-              <p>
             {loading
               ? "Generating response..."
               : responses.find((item) => item.provider === "Gemini")?.success
@@ -138,44 +135,6 @@ import claudeIcon from './assets/claude.png'
                   ? `Error: ${responses.find((item) => item.provider === "Gemini").error}`
                   : "No response yet"}
           </p>
-
-            </p>
-            </div>
-            
-            <div className = "response-card">
-
-              <div className="card-header">
-             <img src={groqIcon} alt="Groq" />
-            <h3> 𝙂𝙍𝙊𝙌 </h3>
-            </div>
-           <p>
-            <p>
-            {loading
-              ? "Generating response..."
-              : responses.find((item) => item.provider === "Groq")?.success
-                ? responses.find((item) => item.provider === "Groq").response
-                : responses.find((item) => item.provider === "Groq")?.error
-                  ? `Error: ${responses.find((item) => item.provider === "Groq").error}`
-                  : "No response yet"}
-         </p>
-          </p>
-            </div>
-
-            <div className = "response-card">
-
-              <div className="card-header">
-              <img src={claudeIcon} alt="Claude" />
-               <h3> ⟡ 𝙈𝙄𝙎𝙏𝙍𝘼𝙇 ⟡ </h3>
-              </div>
-        <p>
-          {loading
-            ? "Generating response..."
-            : responses.find((item) => item.provider === "Mistral")?.success
-              ? responses.find((item) => item.provider === "Mistral").response
-              : responses.find((item) => item.provider === "Mistral")?.error
-                ? `Error: ${responses.find((item) => item.provider === "Mistral").error}`
-                : "No response yet"}
-        </p>
             </div>
         </section>
 
@@ -187,11 +146,16 @@ import claudeIcon from './assets/claude.png'
           type = "text"
           placeholder= "Ask something to compare AI responses"
 
-          // input me jo user type krega vo prompt state me save hoga 
-          value = {prompt}
-          // hr typing ke sath prompt ki value change hogi 
-          onChange = {(e) => setPrompt (e.target.value)}
-          />
+          
+          value = {prompt}                                                   /*input me jo user type krega vo prompt state me save hoga */
+          
+          onChange = {(e) => setPrompt (e.target.value)}                     /*hr typing ke sath prompt ki value change hogi */
+          onKeyDown={(e) => {
+            if (e.key === "Enter") { 
+              sendPrompt()                  /*  e.key === "Enter" checks whether the user pressed Enter.   && sendPrompt()    -> */
+            }
+          }}
+              />
           <button onClick={sendPrompt}>{loading ? "Sending...":"send"}</button>
         </div>
 

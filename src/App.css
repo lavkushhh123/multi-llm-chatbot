@@ -8,24 +8,29 @@ body {margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #0f172a;
   color: #e5e7eb;
+  background-image:
+   linear-gradient(rgba(5, 5, 25, 0.75), rgba(5, 5, 25, 0.75)),      /*dark overlay*/
+   url("./assets/background.png");
+  background-size: cover;
+  background-repeat: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   /* overflow: hidden; */
 }
 
 
-/* =========================
-   Main Layout
-========================= */
+/*Main Layout*/
 
 .app {
   display: flex;
   min-height: 100vh;
   background-color: #0f172a;
+  background: transparent;
 }
 
 
-/* =========================
-   Sidebar
-========================= */
+/*Sidebar */
 
 .sidebar {
   width: 245px;
@@ -88,7 +93,7 @@ body {margin: 0;
 .chat-area {
   flex: 1;
   padding: 35px;
-  background-color: #0f172a;
+  background: transparent;
 }
 
 
@@ -144,14 +149,15 @@ body {margin: 0;
 
   padding: 22px;
 
-  background-color: #1e293b;
+  background: rgba(30 , 41, 59 , 0.4);
 
-  border: 1px solid #334155;
+  border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: 12px;
 
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
 
   transition: 0.2s;
+  backdrop-filter: blur(60px);
 }
 
 .response-card:hover {
@@ -249,4 +255,52 @@ body {margin: 0;
 
 .sidebar p:hover {
   color : white;
+}
+
+/* Responsive Design */
+@media (max-width :768px){
+  .app{
+    flex-direction: column;
+  }
+
+  .sidebar{
+    width: 100%;
+    padding: 15px;
+  }
+  .sidebar h2 {
+    margin-bottom: 15px;
+  }
+  .sidebar button {
+    min-height: 44px;
+  }
+  .responses{
+    flex-direction: column;
+  }
+  .response-card{
+    width: 100%;
+    min-width: 0;
+  }
+  .chat-area{
+    padding: 20px;
+  }
+  .chat-header{
+    height: auto;
+    min-height: 80px;
+    padding: 10px;
+  }
+  .chat-header h1{
+    font-size: 20px;
+  }
+  .chat-header p{
+    font-size: 13px;
+  }
+  .prompt-area input {
+    min-height: 44px;
+    padding: 12px;
+  }
+  
+  .prompt-area button{
+    min-height: 44px;
+    padding: 12px 20px;
+  }
 }
