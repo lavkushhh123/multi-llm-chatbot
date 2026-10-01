@@ -34,10 +34,14 @@ body {margin: 0;
 
 .sidebar {
   width: 245px;
+  height: auto;
   background-color: #111827;
-  color: white;
+  background: rgba(17, 24, 39, 0.1);
+  color:white;
   padding: 25px 20px;
-  border-right: 1px solid #26324a;
+  border: 1px solid rgba(148, 163 , 184 , 0.2);
+  backdrop-filter: blur(60px);
+  border-radius: 10px;
 }
 
 .sidebar h2 {
@@ -50,15 +54,15 @@ body {margin: 0;
 /* New Chat Button */
 
 .sidebar button {
-  width: 100%;
+  width: 60%;
   padding: 11px;
 
   margin-bottom: 30px;
 
-  border: 1px solid #6d5ce7;
+  border: 1px solid  #64748b;
   border-radius: 8px;
 
-  background-color: #6d5ce7;
+  background-color: #4f5d75;
   color: white;
 
   font-size: 14px;
@@ -68,44 +72,48 @@ body {margin: 0;
 }
 
 .sidebar button:hover {
-  background-color: #5848c7;
+  background-color: #5d6b82;
 }
-
 
 /* Recent Chats */
 
 .sidebar h3 {
   font-size: 14px;
-  color: #94a3b8;
+  color: #ffffff;
   margin-bottom: 12px;
 }
 
 .sidebar p {
-  color: #64748b;
+  color: white;
   font-size: 14px;
+  margin-bottom: 10px;
+  border-radius: 1px dashed white;
+  border-width: 90px;
+}
+.sidebar p:hover {
+   background: rgba(255, 255, 255, 0.10);
+   /* color: white; */
 }
 
 
-/* =========================
-   Main Chat Area
-========================= */
+/* Main Chat Area*/
 
 .chat-area {
   flex: 1;
   padding: 35px;
   background: transparent;
 }
+.chat-area p{
+  color: white;
+}
 
 
-/* =========================
-   Header
-========================= */
+/* Header */
 
 .chat-header {
-  margin-top: -10px;
-  margin-bottom: 20px;
-  border: 1px solid #334155;
-  border-radius: 10px;
+  margin-top: -18px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #334155;
   height: 80px;
 }
 
@@ -121,16 +129,14 @@ body {margin: 0;
 }
 
 .chat-header p {
-  color: #94a3b8;
+  color:white;
   font-size: 15px;
   padding-bottom: 1px;
   
 }
 
 
-/* =========================
-   Response Cards
-========================= */
+/* Response Cards */
 
 .responses {
   display: flex;
@@ -145,11 +151,11 @@ body {margin: 0;
   flex: 1;
 
   min-width: 200px;
-  min-height: 350px;
+  min-height:400px;
 
   padding: 22px;
 
-  background: rgba(30 , 41, 59 , 0.4);
+  background: rgba(30 , 41, 59 , 0.1);
 
   border: 1px solid rgba(148, 163, 184, 0.25);
   border-radius: 12px;
@@ -181,10 +187,13 @@ body {margin: 0;
 
 .response-card p {
   color: #94a3b8;
-
-  font-size: 14px;
-
+  color : #ffffff;
+  font-size: 16px;
   line-height: 1.7;
+
+  max-height: 260px;        /* scrolling for long answer*/
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 
@@ -217,7 +226,7 @@ body {margin: 0;
 
 .prompt-area button {
   padding: 12px 22px;
-  background-color: #6d5ce7;
+  background-color: #4f5d75;
   color: white;
   border: none;
   border-radius: 8px;
@@ -226,7 +235,7 @@ body {margin: 0;
 }
 
 .prompt-area button:hover {
-  background-color: #5848c7;
+  background-color:#5d6b82;
 }
 
 .card-header {
@@ -237,8 +246,8 @@ body {margin: 0;
 }
 
 .card-header img {
-  width: 32px;
-  height: 32px;
+  width: 100px;
+  height: 100x;
   object-fit: contain;
 }
 
@@ -246,16 +255,7 @@ body {margin: 0;
   margin: 0;
 }
 
-.sidebar p{
-  color : #6474648b;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
 
-.sidebar p:hover {
-  color : white;
-}
 
 /* Responsive Design */
 @media (max-width :768px){
@@ -279,6 +279,8 @@ body {margin: 0;
   .response-card{
     width: 100%;
     min-width: 0;
+
+    height: 500px;
   }
   .chat-area{
     padding: 20px;

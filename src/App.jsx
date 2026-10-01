@@ -80,7 +80,7 @@ import geminiIcon from './assets/gemini.png'
       {/* Sidebar */}
 
       <aside className = "sidebar">                 {/* aside ka use side information/navigation ke liye hota ha */}
-        <h2>⟡ 𝙈𝙐𝙇𝙏𝙄-𝙇𝙇𝙈 ⟡</h2>
+        <h2> ℂ𝕙𝕒𝕥𝕓𝕠𝕥 </h2>
 
         <button onClick = {() => {
           setResponses([]);                     /* current chat ke response clear kr rha hain */
@@ -114,8 +114,8 @@ import geminiIcon from './assets/gemini.png'
       <main className = "chat-area">
 
         <header className = "chat-header">
-          <h1>𝑴𝑼𝑳𝑻𝑰-𝑳𝑳𝑴 𝑪𝑯𝑨𝑻𝑩𝑶𝑻</h1>
-          <p>⌁ ᴄᴏᴍᴘᴀʀᴇ ʀᴇsᴘᴏɴsᴇs · ᴍᴜʟᴛɪᴘʟᴇ ᴀɪ ᴍᴏᴅᴇʟs ⌁</p>
+          <h1>𝔾𝔼𝕄𝕀ℕ𝕀 𝔽𝕃𝔸𝕊ℍ</h1>
+          <p>⌁ 𝚈𝚘𝚞𝚛 𝙿𝚎𝚛𝚜𝐨𝚗𝚊𝚕 𝙼𝚎𝚗𝚝𝚘𝚛 ⌁</p>
         </header>
 
         <section className = "responses">                           {/* bad me mai yhi pr teen response cards add krunga */}
@@ -124,7 +124,7 @@ import geminiIcon from './assets/gemini.png'
 
             <div className="card-header">
             <img src={geminiIcon} alt="Gemini" />
-            <h3> 𝙂𝙀𝙈𝙄𝙉𝙄 </h3>
+            <h2> 𝐆𝐞𝐦𝐢𝐧𝐢 </h2>
             </div>
             <p>
             {loading
@@ -133,7 +133,7 @@ import geminiIcon from './assets/gemini.png'
                 ? responses.find((item) => item.provider === "Gemini").response
                 : responses.find((item) => item.provider === "Gemini")?.error
                   ? `Error: ${responses.find((item) => item.provider === "Gemini").error}`
-                  : "No response yet"}
+                  : "Hey ! How can I help you out today ?"}
           </p>
             </div>
         </section>
@@ -144,7 +144,7 @@ import geminiIcon from './assets/gemini.png'
 
           <input 
           type = "text"
-          placeholder= "Ask something to compare AI responses"
+          placeholder= "Ask anyhing "
 
           
           value = {prompt}                                                   /*input me jo user type krega vo prompt state me save hoga */
